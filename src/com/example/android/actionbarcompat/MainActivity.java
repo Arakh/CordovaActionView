@@ -16,22 +16,21 @@
 
 package com.example.android.actionbarcompat;
 
+import java.util.concurrent.ExecutorService;
+
 import org.apache.cordova.CordovaWebView;
-import org.apache.cordova.DroidGap;
 import org.apache.cordova.api.CordovaInterface;
-import org.apache.cordova.api.IPlugin;
+import org.apache.cordova.api.CordovaPlugin;
 import org.apache.cordova.api.LOG;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.webkit.WebViewClient;
+
 import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity implements CordovaInterface{
@@ -41,7 +40,7 @@ public class MainActivity extends ActionBarActivity implements CordovaInterface{
     private boolean volumedownBound;
     
     String TAG = "MainActivity-ActionBarTest";
-    private IPlugin activityResultCallback;
+    private CordovaPlugin activityResultCallback;
     private Object activityResultKeepRunning;
     private Object keepRunning;
 
@@ -159,7 +158,7 @@ public class MainActivity extends ActionBarActivity implements CordovaInterface{
     
 
     @Override
-    public void setActivityResultCallback(IPlugin plugin) {
+    public void setActivityResultCallback(CordovaPlugin plugin) {
         this.activityResultCallback = plugin;        
     }
     /**
@@ -170,7 +169,7 @@ public class MainActivity extends ActionBarActivity implements CordovaInterface{
      * @param intent            The intent to start
      * @param requestCode       The request code that is passed to callback to identify the activity
      */
-    public void startActivityForResult(IPlugin command, Intent intent, int requestCode) {
+    public void startActivityForResult(CordovaPlugin command, Intent intent, int requestCode) {
         this.activityResultCallback = command;
         this.activityResultKeepRunning = this.keepRunning;
 
@@ -201,7 +200,7 @@ public class MainActivity extends ActionBarActivity implements CordovaInterface{
      */
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        IPlugin callback = this.activityResultCallback;
+        CordovaPlugin callback = this.activityResultCallback;
         if (callback != null) {
             callback.onActivityResult(requestCode, resultCode, intent);
         }
@@ -285,6 +284,18 @@ public class MainActivity extends ActionBarActivity implements CordovaInterface{
         else {
             //this.endActivity();
         }
+    }
+
+    @Override
+    public ExecutorService getThreadPool() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    @Deprecated
+    public Context getContext() {
+        return this;
     }
 
     
